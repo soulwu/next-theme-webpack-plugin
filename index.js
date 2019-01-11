@@ -135,7 +135,7 @@ function convertCharStr2CSS(ch) {
 
 function matchCSS(chunkName, entry, preparedChunks) {
   if (/\.css$/.test(chunkName)) {
-    const assetsFromEntry = chunkName.replace(/\.\w+$/, '');
+    const assetsFromEntry = chunkName.replace(/\..+$/, '');
     const entriesAndPreparedChunkNames = normalizeEntry(entry, preparedChunks);
     return entriesAndPreparedChunkNames.indexOf(assetsFromEntry) > -1;
   }
