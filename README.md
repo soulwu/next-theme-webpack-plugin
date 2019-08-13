@@ -2,7 +2,7 @@
 A webpack plugin for adding normalize css and icon css of theme package.
 > Forked from @alifd/next-theme-webpack-plugin, fix some bugs
 
-[![npm package](https://img.shields.io/npm/v/@alifd/next-theme-webpack-plugin.svg?style=flat-square)](https://www.npmjs.org/package/@alifd/next-theme-webpack-plugin)
+[![npm package](https://img.shields.io/npm/v/next-theme-webpack-plugin.svg?style=flat-square)](https://www.npmjs.org/package/next-theme-webpack-plugin)
 
 ## Install
 
