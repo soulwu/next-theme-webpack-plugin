@@ -14,6 +14,7 @@ function ThemePlugin(options) {
     options.prependNormalizeCSS : true;
   const theme = options.theme;
   const modifyVars = options.modifyVars;
+  const outputStyle = options.outputStyle || "nested";
 
   let modifyVarsScss = '';
   if (modifyVars) {
@@ -40,27 +41,45 @@ function ThemePlugin(options) {
       variablesScss = fs.readFileSync(variablesPath, 'utf8');
     }
 
-    this.normalizeCss = compileScss(variablesScss + modifyVarsScss + normalizeScss, [path.dirname(normalizePath)]);
+    this.normalizeCss = compileScss(
+      variablesScss + modifyVarsScss + normalizeScss,
+      [path.dirname(normalizePath)],
+      outputStyle
+    );
   }
 
   if (theme) {
     const iconRelativePath = path.join(theme, 'icons.scss');
     const iconPath = resolveFilePath(iconRelativePath, options.resolve);
     const iconScss = fs.readFileSync(iconPath, 'utf8');
-    this.iconCss = compileScss('$css-prefix: "next-";\n' + modifyVarsScss + iconScss, [path.dirname(iconPath)]);
+    this.iconCss = compileScss(
+      '$css-prefix: "next-";\n' + modifyVarsScss + iconScss,
+      [path.dirname(iconPath)],
+      outputStyle
+    );
   }
 }
 
 ThemePlugin.prototype.concatSource = function (compiler, compilation, chunks, done) {
   chunks.forEach(chunk => {
     chunk.files.forEach(fileName => {
-      if (matchCSS(fileName, compiler.options.entry, compilation.preparedChunks)) {
+      if (matchCSS(chunk.name, fileName, compiler.options.entry, compilation.preparedChunks)) {
         if (this.normalizeCss && this.iconCss) {
-          compilation.assets[fileName] = new ConcatSource(this.normalizeCss, compilation.assets[fileName], this.iconCss);
+          compilation.assets[fileName] = new ConcatSource(
+            this.normalizeCss,
+            compilation.assets[fileName].source().replace(/^@charset "UTF-8";/, ""),
+            this.iconCss
+          );
         } else if (this.normalizeCss) {
-          compilation.assets[fileName] = new ConcatSource(this.normalizeCss, compilation.assets[fileName]);
+          compilation.assets[fileName] = new ConcatSource(
+            this.normalizeCss,
+            compilation.assets[fileName].source().replace(/^@charset "UTF-8";/, "")
+          );
         } else {
-          compilation.assets[fileName] = new ConcatSource(compilation.assets[fileName], this.iconCss);
+          compilation.assets[fileName] = new ConcatSource(
+            compilation.assets[fileName].replace(/^@charset "UTF-8";/, ""),
+            this.iconCss
+          );
         }
       }
     });
@@ -117,12 +136,14 @@ function resolveFilePath(relativePath, resolve) {
   return fullPath;
 }
 
-function compileScss(scss, includePaths) {
-  return sass.renderSync({ data: scss, includePaths: includePaths }).css.toString('utf-8')
+function compileScss(scss, includePaths, outputStyle) {
+  return sass
+    .renderSync({ data: scss, includePaths: includePaths, outputStyle: outputStyle })
+    .css.toString("utf-8")
     .replace(/content:\s*(?:'|")([\u0080-\uffff])(?:'|")/g, (str, $1) => {
       return 'content: "' + convertCharStr2CSS($1) + '"';
     })
-    .replace(/^@charset "UTF-8";/, '');
+    .replace(/^@charset "UTF-8";/, "");
 }
 
 function convertCharStr2CSS(ch) {
@@ -133,11 +154,10 @@ function convertCharStr2CSS(ch) {
   return '\\' + code;
 }
 
-function matchCSS(chunkName, entry, preparedChunks) {
-  if (/\.css$/.test(chunkName)) {
-    const assetsFromEntry = chunkName.replace(/\..+$/, '');
+function matchCSS(chunkName, fileName, entry, preparedChunks) {
+  if (/\.css$/.test(fileName)) {
     const entriesAndPreparedChunkNames = normalizeEntry(entry, preparedChunks);
-    return entriesAndPreparedChunkNames.indexOf(assetsFromEntry) > -1;
+    return entriesAndPreparedChunkNames.indexOf(chunkName) > -1;
   }
 
   return false;
