@@ -1,5 +1,6 @@
-# @alifd/next-theme-webpack-plugin
+# next-theme-webpack-plugin
 A webpack plugin for adding normalize css and icon css of theme package.
+> Forked from @alifd/next-theme-webpack-plugin, fix some bugs
 
 [![npm package](https://img.shields.io/npm/v/@alifd/next-theme-webpack-plugin.svg?style=flat-square)](https://www.npmjs.org/package/@alifd/next-theme-webpack-plugin)
 
@@ -8,7 +9,7 @@ A webpack plugin for adding normalize css and icon css of theme package.
 ```
 npm install babel-plugin-import --save-dev
 npm install @alifd/next-theme-loader --save-dev
-npm install @alifd/next-theme-webpack-plugin --save-dev
+npm install next-theme-webpack-plugin --save-dev
 ```
 
 ## Usage
@@ -19,7 +20,7 @@ npm install @alifd/next-theme-webpack-plugin --save-dev
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const ThemePlugin = require('@alifd/next-theme-webpack-plugin');
+const ThemePlugin = require('next-theme-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -88,7 +89,7 @@ webpack.config.js
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const ThemePlugin = require('@alifd/next-theme-webpack-plugin');
+const ThemePlugin = require('next-theme-webpack-plugin');
 
 module.exports = {
   entry: {
