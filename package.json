@@ -1,5 +1,5 @@
 {
-  "name": "@alifd/next-theme-webpack-plugin",
+  "name": "next-theme-webpack-plugin",
   "version": "1.0.1",
   "description": "A webpack plugin for adding normalize css and icon css of theme package.",
   "keywords": [
@@ -9,8 +9,8 @@
     "webpack",
     "plugin"
   ],
-  "homepage": "https://github.com/alibaba-fusion/next-theme-webpack-plugin",
-  "bugs": "https://github.com/alibaba-fusion/next-theme-webpack-plugin/issues",
+  "homepage": "https://github.com/soulwu/next-theme-webpack-plugin",
+  "bugs": "https://github.com/soulwu/next-theme-webpack-plugin/issues",
   "license": "MIT",
   "files": [
     "index.js"
@@ -18,7 +18,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alibaba-fusion/next-theme-webpack-plugin.git"
+    "url": "https://github.com/soulwu/next-theme-webpack-plugin.git"
   },
   "scripts": {
     "lint": "eslint .",
