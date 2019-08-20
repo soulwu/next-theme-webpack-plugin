@@ -77,7 +77,7 @@ ThemePlugin.prototype.concatSource = function (compiler, compilation, chunks, do
           );
         } else {
           compilation.assets[fileName] = new ConcatSource(
-            compilation.assets[fileName].replace(/^@charset "UTF-8";/, ""),
+            compilation.assets[fileName].source().replace(/^@charset "UTF-8";/, ""),
             this.iconCss
           );
         }
